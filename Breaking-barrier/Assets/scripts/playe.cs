@@ -6,11 +6,11 @@ public class playe : MonoBehaviour
     public float jumpForce = 10f;
 
     private Rigidbody2D rb;
-    private int jumpCount = 1;
+    public int jumpCount = 1;
     private bool isGrounded;
 
     public Transform groundCheck;
-    public float groundRadius = 0.2f;
+    public float groundRadius = 0.9f;
     public LayerMask groundLayer;
 
     void Start()
@@ -24,18 +24,23 @@ public class playe : MonoBehaviour
         float move = Input.GetAxisRaw("Horizontal");
         rb.linearVelocity = new Vector2(move * speed, rb.linearVelocity.y);
 
-        // Verifica se está no chão
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
+        
+        
         if (isGrounded)
         {
             jumpCount = 0;
         }
 
-        // Pulo e pulo duplo com Espaço
-        if (Input.GetKeyDown(KeyCode.Space) && jumpCount >= 1)
+        if (Input.GetKeyDown(KeyCode.Space) && jumpCount <= 2)
         {
+           
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpCount++;
+            isGrounded = false;
         }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        isGrounded = true;
     }
 }
